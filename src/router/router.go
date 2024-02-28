@@ -20,7 +20,7 @@ func Router() *echo.Echo {
 	// debug mode enable
 	e.Debug = true
 
-	// echo middleware func
+	// echo middleware func - after route middleware
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
@@ -39,7 +39,12 @@ func Router() *echo.Echo {
 	e.POST("/list", list)
 	e.POST("/read", handler.ReadList)
 
-	//e.Logger.Fatal(e.Start(":1323")) // localhost:1323
+	// router-group
+	holdGroup := e.Group("/hold")
+	{
+		holdGroup.GET("", handler.HoldingBookList)
+		holdGroup.GET("/reg", handler.HoldedBook)
+	}
 
 	return e
 }

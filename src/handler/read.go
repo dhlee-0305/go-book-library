@@ -1,4 +1,4 @@
-package read
+package handler
 
 import (
 	"net/http"
