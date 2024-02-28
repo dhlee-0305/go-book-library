@@ -2,6 +2,7 @@ package router
 
 import (
 	"net/http"
+	"util"
 
 	echo "github.com/labstack/echo"
 	middleware "github.com/labstack/echo/middleware"
@@ -43,7 +44,7 @@ func Router() *echo.Echo {
 	holdGroup := e.Group("/hold")
 	{
 		holdGroup.GET("", handler.HoldingBookList)
-		holdGroup.GET("/reg", handler.HoldedBook)
+		holdGroup.POST("/reg", handler.HoldedBook)
 	}
 
 	return e
@@ -64,6 +65,7 @@ func show(c echo.Context) error {
 func list(c echo.Context) error {
 	team := c.FormValue("team")
 	member := c.FormValue("member")
+	util.LoadFile("data/books.csv")
 	return c.String(http.StatusOK, "team:"+team+", memhber:"+member)
 
 }
