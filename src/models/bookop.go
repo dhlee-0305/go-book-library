@@ -1,6 +1,9 @@
 package models
 
-import "fmt"
+import (
+	"fmt"
+	"strconv"
+)
 
 type BookOp struct {
 	bookId   int64
@@ -26,4 +29,8 @@ func (b *BookOp) HoldBookOp(bookId int64, userName string, opDate string) {
 
 func (b BookOp) Print() {
 	fmt.Printf("bookId:%d, userName:%s, opType:%s, opDate:%s\n", b.bookId, b.userName, b.opType, b.opDate)
+}
+
+func (b BookOp) ToString() string {
+	return "bookId:" + strconv.FormatInt(b.bookId, 10) + ", userName:" + b.userName + ", opType:" + b.opType + ", opDate:" + b.opDate
 }

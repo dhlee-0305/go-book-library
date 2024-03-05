@@ -1,20 +1,19 @@
 package util
 
 import (
+	"container/list"
 	"encoding/csv"
 	"fmt"
 	"io"
-	"models"
 	"os"
-	"strconv"
 )
 
-func LoadFile(csvFile string) {
+func LoadFile(csvFile string) *list.List {
 	// Open the CSV file
 	file, err := os.Open(csvFile)
 	if err != nil {
 		fmt.Println(err)
-		return
+		return nil
 	}
 	defer file.Close()
 
@@ -25,10 +24,11 @@ func LoadFile(csvFile string) {
 	headers, err := reader.Read()
 	if err != nil {
 		fmt.Println(err)
-		return
+		return nil
 	}
 	fmt.Println(headers)
 
+	dataList := list.New()
 	// Read the remaining records
 	for {
 		record, err := reader.Read()
@@ -40,16 +40,14 @@ func LoadFile(csvFile string) {
 			continue
 		}
 
-		book := models.Book{}
-		bookId, _ := strconv.ParseInt(record[0], 10, 64)
-		book.SetBook(bookId, record[1], record[2], record[3], record[4])
-		book.Print()
+		dataList.PushBack(record)
 	}
 
-	// Print the hash map content
 	/*
-		for key, value := range data {
-			fmt.Println("Key:", key, "Value:", value)
+		for e := dataList.Front(); e != nil; e = e.Next() {
+			fmt.Println(e.Value)
 		}
 	*/
+
+	return dataList
 }

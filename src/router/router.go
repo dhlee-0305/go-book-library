@@ -39,6 +39,7 @@ func Router() *echo.Echo {
 	e.GET("/show", show)
 	e.POST("/list", list)
 	e.POST("/read", handler.ReadList)
+	e.GET("/search/:bookName", handler.Search)
 
 	// router-group
 	holdGroup := e.Group("/hold")
