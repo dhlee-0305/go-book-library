@@ -4,7 +4,7 @@ import (
 	"db"
 	"fmt"
 	"strconv"
-	"time"
+	"util"
 )
 
 type BookOp struct {
@@ -22,11 +22,19 @@ func (b *BookOp) setBookOp(bookId int64, userName string, opType string, opDate 
 }
 
 func (b *BookOp) ReadBookOp(bookId int64, userName string) {
-	b.setBookOp(bookId, userName, "READ", b.nowDay())
+	b.setBookOp(bookId, userName, "READ", util.NowDay())
 }
 
-func (b *BookOp) HoldBookOp(bookId int64, userName string) {
-	b.setBookOp(bookId, userName, "Hold", b.nowDay())
+func (b *BookOp) DiscardBookOp(bookId int64, userName string) {
+	b.setBookOp(bookId, userName, "DISC", util.NowDay())
+}
+
+func (b *BookOp) SellBookOp(bookId int64, userName string) {
+	b.setBookOp(bookId, userName, "SELL", util.NowDay())
+}
+
+func (b *BookOp) DonateBookOp(bookId int64, userName string) {
+	b.setBookOp(bookId, userName, "DONA", util.NowDay())
 }
 
 func (b BookOp) Print() {
@@ -37,20 +45,14 @@ func (b BookOp) ToString() string {
 	return "bookId:" + strconv.FormatInt(b.bookId, 10) + ", userName:" + b.userName + ", opType:" + b.opType + ", opDate:" + b.opDate
 }
 
-func (b BookOp) nowDay() string {
-	now := time.Now()
-	nowDay := now.Format("2006-01-02")
-
-	return nowDay
-}
-
 func (b BookOp) Save() {
 	dbCon := db.GetConnector()
+	fmt.Printf("BookOp.Save[%s]\n", b.ToString())
 
 	insertSql, err := dbCon.Prepare("INSERT INTO go_book_op(book_id, user_name, op_type, op_date) VALUES(?, ?, ?, ?)")
 	if err != nil {
 		panic(err.Error())
 	}
-	insertSql.Exec(b.bookId, b.userName, b.opDate, b.opDate)
+	insertSql.Exec(b.bookId, b.userName, b.opType, b.opDate)
 	defer dbCon.Close()
 }

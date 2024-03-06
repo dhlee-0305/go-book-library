@@ -11,6 +11,7 @@ import (
 func ReadList(c echo.Context) error {
 	team := c.FormValue("team")
 	member := c.FormValue("member")
+	// todo
 	return c.String(http.StatusOK, "team:"+team+", memhber:"+member)
 
 }
@@ -21,7 +22,6 @@ func ReadBookReg(c echo.Context) error {
 
 	bookOp := models.BookOp{}
 	bookOp.ReadBookOp(bookId, userName)
-	bookOp.Print()
 	bookOp.Save()
 
 	return c.String(http.StatusOK, bookOp.ToString())
