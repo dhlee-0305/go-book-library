@@ -24,12 +24,14 @@ func Search(c echo.Context) error {
 		for e := bookList.Front(); e != nil; e = e.Next() {
 			book := e.Value.(models.Book)
 			if book.Equals(bookName) {
-				book.Print()
+				//book.Print()
 				returnValue = book.ToString()
+				break
 			}
 
 		}
 	}
+	fmt.Println(returnValue)
 
 	return c.String(http.StatusOK, returnValue)
 }

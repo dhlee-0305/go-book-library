@@ -1,8 +1,10 @@
 package models
 
 import (
+	"db"
 	"fmt"
 	"strconv"
+	"time"
 )
 
 type BookOp struct {
@@ -19,12 +21,12 @@ func (b *BookOp) setBookOp(bookId int64, userName string, opType string, opDate 
 	b.opDate = opDate
 }
 
-func (b *BookOp) ReadBookOp(bookId int64, userName string, opDate string) {
-	b.setBookOp(bookId, userName, "READ", opDate)
+func (b *BookOp) ReadBookOp(bookId int64, userName string) {
+	b.setBookOp(bookId, userName, "READ", b.nowDay())
 }
 
-func (b *BookOp) HoldBookOp(bookId int64, userName string, opDate string) {
-	b.setBookOp(bookId, userName, "Hold", opDate)
+func (b *BookOp) HoldBookOp(bookId int64, userName string) {
+	b.setBookOp(bookId, userName, "Hold", b.nowDay())
 }
 
 func (b BookOp) Print() {
@@ -33,4 +35,22 @@ func (b BookOp) Print() {
 
 func (b BookOp) ToString() string {
 	return "bookId:" + strconv.FormatInt(b.bookId, 10) + ", userName:" + b.userName + ", opType:" + b.opType + ", opDate:" + b.opDate
+}
+
+func (b BookOp) nowDay() string {
+	now := time.Now()
+	nowDay := now.Format("2006-01-02")
+
+	return nowDay
+}
+
+func (b BookOp) Save() {
+	dbCon := db.GetConnector()
+
+	insertSql, err := dbCon.Prepare("INSERT INTO go_book_op(book_id, user_name, op_type, op_date) VALUES(?, ?, ?, ?)")
+	if err != nil {
+		panic(err.Error())
+	}
+	insertSql.Exec(b.bookId, b.userName, b.opDate, b.opDate)
+	defer dbCon.Close()
 }

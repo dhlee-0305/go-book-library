@@ -20,10 +20,8 @@ func HoldedBook(c echo.Context) error {
 	bookIdStr := c.FormValue("bookId")
 	bookId, _ := strconv.ParseInt(bookIdStr, 10, 64)
 	userName := c.FormValue("userName")
-	opDate := c.FormValue("opDate")
-	bookOp.HoldBookOp(bookId, userName, opDate)
+	bookOp.HoldBookOp(bookId, userName)
 	bookOp.Print()
 
 	return c.String(http.StatusOK, "Holding Book OK")
-
 }
