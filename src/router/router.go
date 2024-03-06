@@ -58,6 +58,11 @@ func Router() *echo.Echo {
 		readGroup.POST("/reg", handler.ReadBookReg)
 	}
 
+	loaderGroup := e.Group("/loader")
+	{
+		loaderGroup.GET("/books", handler.LoadBookFromCSV)
+	}
+
 	return e
 }
 

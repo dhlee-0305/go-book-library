@@ -1,8 +1,10 @@
 package models
 
 import (
+	"db"
 	"fmt"
 	"strconv"
+	"util"
 )
 
 type Book struct {
@@ -13,12 +15,12 @@ type Book struct {
 	buyDate   string
 }
 
-func (b *Book) SetBook(bookId int64, bookName string, editor string, publisher string, buyDate string) {
-	b.bookId = bookId
+func (b *Book) SetBook(bookId string, bookName string, editor string, publisher string, buyDate string) {
+	b.bookId, _ = strconv.ParseInt(bookId, 10, 64)
 	b.bookName = bookName
 	b.editor = editor
 	b.publisher = publisher
-	b.buyDate = buyDate
+	b.buyDate = util.ConvertDayFormat(buyDate)
 }
 
 func (b *Book) Equals(bookName string) bool {
@@ -31,4 +33,16 @@ func (b Book) Print() {
 
 func (b Book) ToString() string {
 	return "bookId:" + strconv.FormatInt(b.bookId, 10) + ", bookName:" + b.bookName + ", editor:" + b.editor + ", publisher:" + b.publisher + ", buyDate:" + b.buyDate
+}
+
+func (b Book) Save() {
+	dbCon := db.GetConnector()
+	fmt.Printf("Book.Save[%s]\n", b.ToString())
+
+	insertSql, err := dbCon.Prepare("INSERT INTO go_book(book_id, book_name, editor, publisher, buy_date) VALUES(?, ?, ?, ?, ?)")
+	if err != nil {
+		panic(err.Error())
+	}
+	insertSql.Exec(b.bookId, b.bookName, b.editor, b.publisher, b.buyDate)
+	defer dbCon.Close()
 }

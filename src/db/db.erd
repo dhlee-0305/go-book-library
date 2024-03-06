@@ -190,7 +190,7 @@
         "comment": "구입일",
         "dataType": "VARCHAR(10)",
         "default": "",
-        "options": 8,
+        "options": 0,
         "ui": {
           "keys": 0,
           "widthName": 60,
@@ -199,7 +199,7 @@
           "widthDefault": 60
         },
         "meta": {
-          "updateAt": 1709687189147,
+          "updateAt": 1709700348179,
           "createAt": 1709686589167
         }
       },
@@ -371,7 +371,7 @@
       {
         "name": 1709686601571,
         "dataType": 1709687189145,
-        "options(notNull)": 1709686611996,
+        "options(notNull)": 1709700348177,
         "comment": 1709686618608
       }
     ],
