@@ -50,32 +50,43 @@ func (b BookOp) ToString() string {
 	return "bookId:" + strconv.FormatInt(b.bookId, 10) + ", userName:" + b.userName + ", opType:" + b.opType + ", opDate:" + b.opDate
 }
 
-func (b BookOp) Save() {
+func (b BookOp) Save() (int64, int) {
+	var retVal int = db.SQL_SUCCESS
+	var nRow int64 = 0
+
 	dbCon := db.GetConnector()
+
 	fmt.Printf("BookOp.Save[%s]\n", b.ToString())
 
-	insertSql, err := dbCon.Prepare("INSERT INTO go_book_op(book_id, user_name, op_type, op_date) VALUES(?, ?, ?, ?)")
-	if err != nil {
-		panic(err.Error())
+	insertSql, _ := dbCon.Prepare("INSERT INTO go_book_op(book_id, user_name, op_type, op_date) VALUES(?, ?, ?, ?)")
+	result, err := insertSql.Exec(b.bookId, b.userName, b.opType, b.opDate)
+	retVal = db.CheckErr(err)
+
+	if err == nil && retVal == db.SQL_SUCCESS {
+		nRow, _ := result.RowsAffected()
+		retVal = db.CheckResult(nRow, db.INSERT_NO_CREATE)
 	}
-	insertSql.Exec(b.bookId, b.userName, b.opType, b.opDate)
+
 	defer dbCon.Close()
+
+	return nRow, retVal
 }
 
-func (b BookOp) FindBookIdByBookName(bookName string) int64 {
+func (b BookOp) FindBookIdByBookName(bookName string) (int64, int) {
+	var retVal int = db.SQL_SUCCESS
+
 	dbCon := db.GetConnector()
 	selectSql, err := dbCon.Query("SELECT book_id FROM go_book WHERE book_name=?", bookName)
-	if err != nil {
-		panic(err.Error())
-	}
+	retVal = db.CheckErr(err)
+
 	var bookId int64 = 0
 	for selectSql.Next() {
 		err = selectSql.Scan(&bookId)
-		if err != nil {
-			panic(err.Error())
+		if err == nil && retVal == db.SQL_SUCCESS {
+			retVal = db.CheckResult(bookId, db.SELECT_NO_RESULT)
 		}
 	}
 	defer dbCon.Close()
 
-	return bookId
+	return bookId, retVal
 }

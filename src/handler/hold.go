@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"models"
 	"net/http"
 
@@ -36,9 +37,10 @@ func SellBookReg(c echo.Context) error {
 
 	book := models.Book{}
 	book.SetBookByOp(bookOp)
-	book.UpdateStatus()
+	_, retVal := book.UpdateStatus()
+	resultCode := fmt.Sprintf("resultCode:%d", retVal)
 
-	return c.String(http.StatusOK, bookOp.ToString())
+	return c.String(http.StatusOK, resultCode)
 }
 
 func DonateBookReg(c echo.Context) error {
@@ -51,7 +53,8 @@ func DonateBookReg(c echo.Context) error {
 
 	book := models.Book{}
 	book.SetBookByOp(bookOp)
-	book.UpdateStatus()
+	_, retVal := book.UpdateStatus()
+	resultCode := fmt.Sprintf("resultCode:%d", retVal)
 
-	return c.String(http.StatusOK, bookOp.ToString())
+	return c.String(http.StatusOK, resultCode)
 }

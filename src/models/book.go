@@ -43,28 +43,43 @@ func (b Book) ToString() string {
 	return "bookId:" + strconv.FormatInt(b.bookId, 10) + ", bookName:" + b.bookName + ", editor:" + b.editor + ", publisher:" + b.publisher + ", buyDate:" + b.buyDate + ", status:" + b.status
 }
 
-func (b Book) Save() {
+func (b Book) Save() (int64, int) {
+	var retVal int = db.SQL_SUCCESS
+	var nRow int64 = 0
+
 	dbCon := db.GetConnector()
 	fmt.Printf("Book.Save[%s]\n", b.ToString())
 
-	insertSql, err := dbCon.Prepare("INSERT INTO go_book(book_id, book_name, editor, publisher, buy_date, status) VALUES(?, ?, ?, ?, ?, ?)")
-	if err != nil {
-		panic(err.Error())
+	insertSql, _ := dbCon.Prepare("INSERT INTO go_book(book_id, book_name, editor, publisher, buy_date, status) VALUES(?, ?, ?, ?, ?, ?)")
+	result, err := insertSql.Exec(b.bookId, b.bookName, b.editor, b.publisher, b.buyDate, b.status)
+	retVal = db.CheckErr(err)
+
+	if err == nil && retVal == db.SQL_SUCCESS {
+		nRow, _ := result.RowsAffected()
+		retVal = db.CheckResult(nRow, db.INSERT_NO_CREATE)
 	}
-	insertSql.Exec(b.bookId, b.bookName, b.editor, b.publisher, b.buyDate, b.status)
 	defer dbCon.Close()
+	return nRow, retVal
 }
 
-func (b Book) UpdateStatus() {
+func (b Book) UpdateStatus() (int64, int) {
+	var retVal int = db.SQL_SUCCESS
+	var nRow int64 = 0
+
 	dbCon := db.GetConnector()
 	fmt.Printf("Book.UpdateStatus[%s]\n", b.ToString())
 
-	insertSql, err := dbCon.Prepare("UPDATE go_book SET status=? WHERE book_id=?")
-	if err != nil {
-		panic(err.Error())
+	insertSql, _ := dbCon.Prepare("UPDATE go_book SET status=? WHERE book_id=?")
+	result, err := insertSql.Exec(b.status, b.bookId)
+	retVal = db.CheckErr(err)
+
+	if err == nil && retVal == db.SQL_SUCCESS {
+		nRow, _ := result.RowsAffected()
+		retVal = db.CheckResult(nRow, db.INSERT_NO_CREATE)
 	}
-	insertSql.Exec(b.status, b.bookId)
+
 	defer dbCon.Close()
+	return nRow, retVal
 }
 
 func (b Book) getStatusByOpType(opType string) string {

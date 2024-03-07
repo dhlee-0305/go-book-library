@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"db"
 	"fmt"
 	"models"
 	"net/http"
@@ -45,16 +46,22 @@ func LoadReadHistoryFromCSV(c echo.Context) error {
 			}
 			if len(bookName1) > 0 {
 				bookOp := models.BookOp{}
-				bookId := strconv.FormatInt(bookOp.FindBookIdByBookName(bookName1), 10)
-				bookOp.ReadCSVBookOp(bookId, "이대현", year)
+				bookId, result := bookOp.FindBookIdByBookName(bookName1)
+				if result != db.SQL_SUCCESS {
+					bookId = 0
+				}
+				bookOp.ReadCSVBookOp(strconv.FormatInt(bookId, 10), "이대현", year)
 
 				//fmt.Println("bookName:" + bookName1 + ", " + bookOp.ToString())
 				bookOp.Save()
 			}
 			if len(bookName2) > 0 {
 				bookOp := models.BookOp{}
-				bookId := strconv.FormatInt(bookOp.FindBookIdByBookName(bookName2), 10)
-				bookOp.ReadCSVBookOp(bookId, "이문선", year)
+				bookId, result := bookOp.FindBookIdByBookName(bookName2)
+				if result != db.SQL_SUCCESS {
+					bookId = 0
+				}
+				bookOp.ReadCSVBookOp(strconv.FormatInt(bookId, 10), "이문선", year)
 
 				//fmt.Println("bookName:" + bookName2 + ", " + bookOp.ToString())
 				bookOp.Save()
@@ -82,16 +89,22 @@ func LoadDiscardHistoryFromCSV(c echo.Context) error {
 			}
 			if len(bookName1) > 0 {
 				bookOp := models.BookOp{}
-				bookId := strconv.FormatInt(bookOp.FindBookIdByBookName(bookName1), 10)
-				bookOp.DiscardBookOp(bookId, "이대현")
+				bookId, result := bookOp.FindBookIdByBookName(bookName1)
+				if result != db.SQL_SUCCESS {
+					bookId = 0
+				}
+				bookOp.DiscardBookOp(strconv.FormatInt(bookId, 10), "이대현")
 
 				//fmt.Println("bookName:" + bookName1 + ", " + bookOp.ToString())
 				bookOp.Save()
 			}
 			if len(bookName2) > 0 {
 				bookOp := models.BookOp{}
-				bookId := strconv.FormatInt(bookOp.FindBookIdByBookName(bookName2), 10)
-				bookOp.DiscardBookOp(bookId, "이문선")
+				bookId, result := bookOp.FindBookIdByBookName(bookName2)
+				if result != db.SQL_SUCCESS {
+					bookId = 0
+				}
+				bookOp.DiscardBookOp(strconv.FormatInt(bookId, 10), "이문선")
 
 				//fmt.Println("bookName:" + bookName2 + ", " + bookOp.ToString())
 				bookOp.Save()
