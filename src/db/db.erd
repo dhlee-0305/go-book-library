@@ -10,7 +10,7 @@
     "show": 447,
     "database": 4,
     "databaseName": "",
-    "canvasType": "ERD",
+    "canvasType": "@dineug/erd-editor/builtin-schema-sql",
     "language": 1,
     "tableNameCase": 4,
     "columnNameCase": 2,
@@ -48,14 +48,16 @@
           "gV9eyz6Xp5kiKZphBCmjF",
           "2Nu9ESgkLmtbZaI47iWX-",
           "532Gg5bOcO7H4UYNkAAuu",
-          "iDYoVrOEnoDywT_48ewJB"
+          "iDYoVrOEnoDywT_48ewJB",
+          "t3jYz-3N-fkAmB83L6QXo"
         ],
         "seqColumnIds": [
           "dAf79AdrDm58J0_icmxzu",
           "gV9eyz6Xp5kiKZphBCmjF",
           "2Nu9ESgkLmtbZaI47iWX-",
           "532Gg5bOcO7H4UYNkAAuu",
-          "iDYoVrOEnoDywT_48ewJB"
+          "iDYoVrOEnoDywT_48ewJB",
+          "t3jYz-3N-fkAmB83L6QXo"
         ],
         "ui": {
           "x": 139,
@@ -66,7 +68,7 @@
           "color": ""
         },
         "meta": {
-          "updateAt": 1709686656534,
+          "updateAt": 1709782624419,
           "createAt": 1709686410873
         }
       },
@@ -97,7 +99,7 @@
           "color": ""
         },
         "meta": {
-          "updateAt": 1709688749082,
+          "updateAt": 1709782620349,
           "createAt": 1709686632747
         }
       }
@@ -119,7 +121,7 @@
           "widthDefault": 60
         },
         "meta": {
-          "updateAt": 1709688703878,
+          "updateAt": 1709782620348,
           "createAt": 1709686434823
         }
       },
@@ -139,7 +141,7 @@
           "widthDefault": 60
         },
         "meta": {
-          "updateAt": 1709687142968,
+          "updateAt": 1709782620348,
           "createAt": 1709686490149
         }
       },
@@ -159,7 +161,7 @@
           "widthDefault": 60
         },
         "meta": {
-          "updateAt": 1709687152192,
+          "updateAt": 1709782620348,
           "createAt": 1709686543935
         }
       },
@@ -179,7 +181,7 @@
           "widthDefault": 60
         },
         "meta": {
-          "updateAt": 1709687158879,
+          "updateAt": 1709782620348,
           "createAt": 1709686566328
         }
       },
@@ -199,7 +201,7 @@
           "widthDefault": 60
         },
         "meta": {
-          "updateAt": 1709700348179,
+          "updateAt": 1709782620348,
           "createAt": 1709686589167
         }
       },
@@ -219,7 +221,7 @@
           "widthDefault": 60
         },
         "meta": {
-          "updateAt": 1709686693760,
+          "updateAt": 1709782620348,
           "createAt": 1709686680681
         }
       },
@@ -239,7 +241,7 @@
           "widthDefault": 60
         },
         "meta": {
-          "updateAt": 1709688694083,
+          "updateAt": 1709782620348,
           "createAt": 1709686694536
         }
       },
@@ -259,7 +261,7 @@
           "widthDefault": 60
         },
         "meta": {
-          "updateAt": 1709687198558,
+          "updateAt": 1709782620348,
           "createAt": 1709686730769
         }
       },
@@ -279,7 +281,7 @@
           "widthDefault": 60
         },
         "meta": {
-          "updateAt": 1709687202500,
+          "updateAt": 1709782620349,
           "createAt": 1709686766092
         }
       },
@@ -299,8 +301,28 @@
           "widthDefault": 60
         },
         "meta": {
-          "updateAt": 1709688904681,
+          "updateAt": 1709782620348,
           "createAt": 1709688720296
+        }
+      },
+      "t3jYz-3N-fkAmB83L6QXo": {
+        "id": "t3jYz-3N-fkAmB83L6QXo",
+        "tableId": "of6DiVAguyjHmocwLyEm_",
+        "name": "status",
+        "comment": "도서 보관 상태",
+        "dataType": "VARCHAR(10)",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 81,
+          "widthDataType": 75,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 1709782646477,
+          "createAt": 1709782624418
         }
       }
     },
@@ -439,6 +461,16 @@
         "comment": 1709688745364,
         "options(primaryKey)": 1709688809281,
         "options(autoIncrement)": 1709688904679
+      }
+    ],
+    "t3jYz-3N-fkAmB83L6QXo": [
+      "tableColumnEntities",
+      1709782624413,
+      -1,
+      {
+        "name": 1709782629200,
+        "dataType": 1709782638201,
+        "comment": 1709782646477
       }
     ]
   }

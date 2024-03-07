@@ -34,6 +34,8 @@ func SellBookReg(c echo.Context) error {
 	bookOp.SellBookOp(bookId, userName)
 	bookOp.Save()
 
+	// todo - go_book 테이블에 해당 내역 반영
+
 	return c.String(http.StatusOK, bookOp.ToString())
 }
 
@@ -44,6 +46,8 @@ func DonateBookReg(c echo.Context) error {
 	bookOp := models.BookOp{}
 	bookOp.DonateBookOp(bookId, userName)
 	bookOp.Save()
+
+	// todo - go_book 테이블에 해당 내역 반영
 
 	return c.String(http.StatusOK, bookOp.ToString())
 }

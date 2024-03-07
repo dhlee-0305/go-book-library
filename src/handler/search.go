@@ -42,7 +42,7 @@ func parseBook(dataList *list.List, bookList *list.List) int {
 
 		book := models.Book{}
 		record := e.Value.([]string)
-		book.SetBook(record[0], record[1], record[2], record[3], record[4])
+		book.SetBook(record[0], record[1], record[2], record[3], record[4], record[5])
 		bookList.PushBack(book)
 	}
 	fmt.Printf("book count:%d\n", count)

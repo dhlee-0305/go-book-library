@@ -63,7 +63,6 @@ func (b BookOp) Save() {
 }
 
 func (b BookOp) FindBookIdByBookName(bookName string) int64 {
-	// todo - test
 	dbCon := db.GetConnector()
 	selectSql, err := dbCon.Query("SELECT book_id FROM go_book WHERE book_name=?", bookName)
 	if err != nil {

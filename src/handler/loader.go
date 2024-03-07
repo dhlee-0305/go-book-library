@@ -18,7 +18,7 @@ func LoadBookFromCSV(c echo.Context) error {
 		for e := dataList.Front(); e != nil; e = e.Next() {
 			book := models.Book{}
 			record := e.Value.([]string)
-			book.SetBook(record[0], record[1], record[2], record[3], record[4])
+			book.SetBook(record[0], record[1], record[2], record[3], record[4], record[5])
 			//book.Print()
 			book.Save()
 		}
