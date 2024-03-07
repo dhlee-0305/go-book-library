@@ -3,7 +3,6 @@ package handler
 import (
 	"models"
 	"net/http"
-	"strconv"
 
 	"github.com/labstack/echo"
 	_ "github.com/labstack/echo/middleware"
@@ -17,7 +16,7 @@ func HoldingBookList(c echo.Context) error {
 }
 
 func DiscardBookReg(c echo.Context) error {
-	bookId, _ := strconv.ParseInt(c.FormValue("bookId"), 10, 64)
+	bookId := c.FormValue("bookId")
 	userName := c.FormValue("userName")
 
 	bookOp := models.BookOp{}
@@ -28,7 +27,7 @@ func DiscardBookReg(c echo.Context) error {
 }
 
 func SellBookReg(c echo.Context) error {
-	bookId, _ := strconv.ParseInt(c.FormValue("bookId"), 10, 64)
+	bookId := c.FormValue("bookId")
 	userName := c.FormValue("userName")
 
 	bookOp := models.BookOp{}
@@ -39,7 +38,7 @@ func SellBookReg(c echo.Context) error {
 }
 
 func DonateBookReg(c echo.Context) error {
-	bookId, _ := strconv.ParseInt(c.FormValue("bookId"), 10, 64)
+	bookId := c.FormValue("bookId")
 	userName := c.FormValue("userName")
 
 	bookOp := models.BookOp{}

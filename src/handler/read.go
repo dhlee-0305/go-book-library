@@ -3,7 +3,6 @@ package handler
 import (
 	"models"
 	"net/http"
-	"strconv"
 
 	"github.com/labstack/echo"
 )
@@ -17,7 +16,7 @@ func ReadList(c echo.Context) error {
 }
 
 func ReadBookReg(c echo.Context) error {
-	bookId, _ := strconv.ParseInt(c.FormValue("bookId"), 10, 64)
+	bookId := c.FormValue("bookId")
 	userName := c.FormValue("userName")
 
 	bookOp := models.BookOp{}

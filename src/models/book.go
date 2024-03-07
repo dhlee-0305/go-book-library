@@ -4,6 +4,7 @@ import (
 	"db"
 	"fmt"
 	"strconv"
+	"strings"
 	"util"
 )
 
@@ -17,9 +18,9 @@ type Book struct {
 
 func (b *Book) SetBook(bookId string, bookName string, editor string, publisher string, buyDate string) {
 	b.bookId, _ = strconv.ParseInt(bookId, 10, 64)
-	b.bookName = bookName
-	b.editor = editor
-	b.publisher = publisher
+	b.bookName = strings.Trim(bookName, " ")
+	b.editor = strings.Trim(editor, " ")
+	b.publisher = strings.Trim(publisher, " ")
 	b.buyDate = util.ConvertDayFormat(buyDate)
 }
 
