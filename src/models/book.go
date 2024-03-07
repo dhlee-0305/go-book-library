@@ -26,6 +26,11 @@ func (b *Book) SetBook(bookId string, bookName string, editor string, publisher 
 	b.status = strings.Trim(status, " ")
 }
 
+func (b *Book) SetBookByOp(bookOp BookOp) {
+	b.bookId = bookOp.bookId
+	b.status = b.getStatusByOpType(bookOp.opType)
+}
+
 func (b *Book) Equals(bookName string) bool {
 	return b.bookName == bookName
 }
@@ -48,4 +53,30 @@ func (b Book) Save() {
 	}
 	insertSql.Exec(b.bookId, b.bookName, b.editor, b.publisher, b.buyDate, b.status)
 	defer dbCon.Close()
+}
+
+func (b Book) UpdateStatus() {
+	dbCon := db.GetConnector()
+	fmt.Printf("Book.UpdateStatus[%s]\n", b.ToString())
+
+	insertSql, err := dbCon.Prepare("UPDATE go_book SET status=? WHERE book_id=?")
+	if err != nil {
+		panic(err.Error())
+	}
+	insertSql.Exec(b.status, b.bookId)
+	defer dbCon.Close()
+}
+
+func (b Book) getStatusByOpType(opType string) string {
+	status := ""
+	if opType == "SELL" {
+		status = "판매"
+	} else if opType == "DONA" {
+		status = "기부"
+	} else {
+		fmt.Println("getStatusByOpType: 잘못된 opType:" + opType)
+		status = opType
+	}
+
+	return status
 }
