@@ -66,3 +66,40 @@ func LoadReadHistoryFromCSV(c echo.Context) error {
 	return c.String(http.StatusOK, returnValue)
 
 }
+
+func LoadDiscardHistoryFromCSV(c echo.Context) error {
+	dataList := util.LoadFile("data/discard.csv")
+	count := dataList.Len()
+	if count > 0 {
+		for e := dataList.Front(); e != nil; e = e.Next() {
+			record := e.Value.([]string)
+
+			bookName1 := strings.Trim(record[0], " ")
+			bookName2 := strings.Trim(record[1], " ")
+
+			if bookName1 == "이대현" || bookName2 == "이문선" {
+				continue
+			}
+			if len(bookName1) > 0 {
+				bookOp := models.BookOp{}
+				bookId := strconv.FormatInt(bookOp.FindBookIdByBookName(bookName1), 10)
+				bookOp.DiscardBookOp(bookId, "이대현")
+
+				//fmt.Println("bookName:" + bookName1 + ", " + bookOp.ToString())
+				bookOp.Save()
+			}
+			if len(bookName2) > 0 {
+				bookOp := models.BookOp{}
+				bookId := strconv.FormatInt(bookOp.FindBookIdByBookName(bookName2), 10)
+				bookOp.DiscardBookOp(bookId, "이문선")
+
+				//fmt.Println("bookName:" + bookName2 + ", " + bookOp.ToString())
+				bookOp.Save()
+			}
+		}
+	}
+
+	returnValue := fmt.Sprintf("LoadDiscardHistoryFromCSV Total:%d Inserted", count)
+	return c.String(http.StatusOK, returnValue)
+
+}

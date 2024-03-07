@@ -62,6 +62,7 @@ func Router() *echo.Echo {
 	{
 		loaderGroup.GET("/books", handler.LoadBookFromCSV)
 		loaderGroup.GET("/readHist", handler.LoadReadHistoryFromCSV)
+		loaderGroup.GET("/discard", handler.LoadDiscardHistoryFromCSV)
 	}
 
 	return e
