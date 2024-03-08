@@ -13,28 +13,38 @@ import (
 	"github.com/labstack/echo"
 )
 
-func Search(c echo.Context) error {
+func SearchCSV(c echo.Context) error {
 	bookName := c.Param("bookName")
 	fmt.Printf("input bookName:%s\n", bookName)
 	dataList := util.LoadFile("data/books.csv")
 	bookList := list.New()
 
-	returnValue := ""
+	searchResult := models.Book{}
+	var resultMessage string
+	var resultCode int
+	var notFound bool = true
 	count := parseBook(dataList, bookList)
 	if count > 0 {
 		for e := bookList.Front(); e != nil; e = e.Next() {
 			book := e.Value.(models.Book)
 			if book.Equals(bookName) {
-				//book.Print()
-				returnValue = book.ToString()
+				searchResult = book
+				notFound = false
 				break
 			}
 
 		}
 	}
-	fmt.Println(returnValue)
+	if notFound {
+		resultCode = http.StatusNoContent
+		resultMessage = models.DB_NO_CONTENT
+	}
 
-	return c.String(http.StatusOK, returnValue)
+	result := models.SingleBookResult{}
+	result.SetResult(searchResult, resultCode, resultMessage)
+	resultJson, _ := json.Marshal(result)
+
+	return c.String(http.StatusOK, string(resultJson))
 }
 
 func parseBook(dataList *list.List, bookList *list.List) int {
