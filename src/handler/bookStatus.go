@@ -17,8 +17,9 @@ func DiscardBookReg(c echo.Context) error {
 	intBookId, _ := strconv.ParseInt(bookId, 10, 64)
 	checkBookOp, _ := models.FindBookOp(intBookId, userName)
 	if checkBookOp.OpType == "DISC" {
+		checkBookOp.DiscardBookOp(bookId, userName)
 		result := models.OpResult{}
-		result.SetResult(models.BookOp{}, http.StatusConflict, models.DB_CONFLICT)
+		result.SetResult(checkBookOp, http.StatusConflict, models.DB_CONFLICT)
 		resultJson, _ := json.Marshal(result)
 
 		return c.String(http.StatusOK, string(resultJson))
@@ -49,8 +50,10 @@ func SellBookReg(c echo.Context) error {
 	intBookId, _ := strconv.ParseInt(bookId, 10, 64)
 	book, _ := models.FindBookByBookId(intBookId)
 	if book.Status == "판매" || book.Status == "기부" {
+		checkBookOp := models.BookOp{}
+		checkBookOp.SellBookOp(bookId, userName)
 		result := models.OpResult{}
-		result.SetResult(models.BookOp{}, http.StatusConflict, models.DB_CONFLICT)
+		result.SetResult(checkBookOp, http.StatusConflict, models.DB_CONFLICT)
 		resultJson, _ := json.Marshal(result)
 
 		return c.String(http.StatusOK, string(resultJson))
@@ -83,8 +86,10 @@ func DonateBookReg(c echo.Context) error {
 	intBookId, _ := strconv.ParseInt(bookId, 10, 64)
 	book, _ := models.FindBookByBookId(intBookId)
 	if book.Status == "판매" || book.Status == "기부" {
+		checkBookOp := models.BookOp{}
+		checkBookOp.DonateBookOp(bookId, userName)
 		result := models.OpResult{}
-		result.SetResult(models.BookOp{}, http.StatusConflict, models.DB_CONFLICT)
+		result.SetResult(checkBookOp, http.StatusConflict, models.DB_CONFLICT)
 		resultJson, _ := json.Marshal(result)
 
 		return c.String(http.StatusOK, string(resultJson))
