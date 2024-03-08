@@ -4,17 +4,11 @@ import (
 	"encoding/json"
 	"models"
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo"
 	_ "github.com/labstack/echo/middleware"
 )
-
-func HoldingBookList(c echo.Context) error {
-	//return c.String(http.StatusOK, "team:"+team+", memhber:"+member)
-	// todo
-	return c.String(http.StatusOK, "Holding Book List")
-
-}
 
 func DiscardBookReg(c echo.Context) error {
 	bookId := c.FormValue("bookId")
@@ -42,6 +36,16 @@ func SellBookReg(c echo.Context) error {
 	bookId := c.FormValue("bookId")
 	userName := c.FormValue("userName")
 
+	intBookId, _ := strconv.ParseInt(bookId, 10, 64)
+	book, _ := models.FindBookByBookId(intBookId)
+	if book.Status == "판매" || book.Status == "기부" {
+		result := models.OpResult{}
+		result.SetResult("", http.StatusConflict, models.DB_CONFLICT)
+		resultJson, _ := json.Marshal(result)
+
+		return c.String(http.StatusOK, string(resultJson))
+	}
+
 	bookOp := models.BookOp{}
 	bookOp.SellBookOp(bookId, userName)
 	nRow, retVal := bookOp.Save()
@@ -65,6 +69,16 @@ func SellBookReg(c echo.Context) error {
 func DonateBookReg(c echo.Context) error {
 	bookId := c.FormValue("bookId")
 	userName := c.FormValue("userName")
+
+	intBookId, _ := strconv.ParseInt(bookId, 10, 64)
+	book, _ := models.FindBookByBookId(intBookId)
+	if book.Status == "판매" || book.Status == "기부" {
+		result := models.OpResult{}
+		result.SetResult("", http.StatusConflict, models.DB_CONFLICT)
+		resultJson, _ := json.Marshal(result)
+
+		return c.String(http.StatusOK, string(resultJson))
+	}
 
 	bookOp := models.BookOp{}
 	bookOp.DonateBookOp(bookId, userName)

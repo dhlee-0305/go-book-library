@@ -47,7 +47,6 @@ func Router() *echo.Echo {
 	// router-group
 	holdGroup := e.Group("/hold")
 	{
-		holdGroup.GET("", handler.HoldingBookList)
 		holdGroup.POST("/discard/reg", handler.DiscardBookReg)
 		holdGroup.POST("/sell/reg", handler.SellBookReg)
 		holdGroup.POST("/donate/reg", handler.DonateBookReg)

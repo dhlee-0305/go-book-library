@@ -8,6 +8,7 @@ const (
 	DB_DELETE_FAIL = "데이터 삭제 오류"
 
 	DB_NO_CONTENT = "조회 내역 없음"
+	DB_CONFLICT   = "상태를 변경할 수 없음"
 )
 
 type MultiBookResult struct {

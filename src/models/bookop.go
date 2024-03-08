@@ -64,7 +64,7 @@ func (b BookOp) Save() (int64, int) {
 	retVal = CheckErr(err)
 
 	if err == nil && retVal == http.StatusOK {
-		nRow, _ := result.RowsAffected()
+		nRow, _ = result.RowsAffected()
 		retVal = CheckResult(nRow, http.StatusOK)
 	}
 

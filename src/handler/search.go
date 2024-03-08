@@ -81,15 +81,16 @@ func SearchBookToRead(c echo.Context) error {
 	userName := c.Param("userName")
 
 	dbCon := db.GetConnector()
-	selectSql, err := dbCon.Query(`SELECT a.book_id, a.book_name, a.editor, a.publisher, a.buy_date, a.status 
-									FROM go_book a 
-									WHERE a.book_id NOT IN ( 
-										SELECT book_id 
-										FROM go_book_op 
-										WHERE user_name = ? 
-									) 
-									AND a.status NOT IN ('판매', '기부') 
-									AND a.book_name NOT IN('어린왕자', '모비딕')`, userName)
+	selectSql, err :=
+		dbCon.Query(`SELECT a.book_id, a.book_name, a.editor, a.publisher, a.buy_date, a.status 
+					FROM go_book a 
+					WHERE a.book_id NOT IN ( 
+						SELECT book_id 
+						FROM go_book_op 
+						WHERE user_name = ? 
+					) 
+					AND a.status NOT IN ('판매', '기부') 
+					AND a.book_name NOT IN('어린왕자', '모비딕')`, userName)
 	errCode = models.CheckErr(err)
 
 	result := models.MultiBookResult{}

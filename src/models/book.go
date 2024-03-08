@@ -56,7 +56,7 @@ func (b Book) Save() (int64, int) {
 	retVal = CheckErr(err)
 
 	if err == nil && retVal == http.StatusOK {
-		nRow, _ := result.RowsAffected()
+		nRow, _ = result.RowsAffected()
 		retVal = CheckResult(nRow, http.StatusOK)
 	}
 	defer dbCon.Close()
@@ -109,6 +109,28 @@ func FindBookByBookName(bookName string) (Book, int) {
 
 	dbCon := db.GetConnector()
 	selectSql, err := dbCon.Query("SELECT book_id, book_name, editor, publisher, buy_date, status FROM go_book WHERE book_name=?", bookName)
+	retVal = CheckErr(err)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	book := Book{}
+	for selectSql.Next() {
+		err = selectSql.Scan(&book.BookId, &book.BookName, &book.Editor, &book.Publisher, &book.BuyDate, &book.Status)
+		if err == nil && retVal == http.StatusOK {
+			retVal = CheckResult(book.BookId, http.StatusNoContent)
+		}
+	}
+	defer dbCon.Close()
+
+	return book, retVal
+}
+
+func FindBookByBookId(bookId int64) (Book, int) {
+	var retVal int = http.StatusOK
+
+	dbCon := db.GetConnector()
+	selectSql, err := dbCon.Query("SELECT book_id, book_name, editor, publisher, buy_date, status FROM go_book WHERE book_id=?", bookId)
 	retVal = CheckErr(err)
 	if err != nil {
 		fmt.Println(err.Error())
