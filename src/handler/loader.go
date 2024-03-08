@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"db"
 	"fmt"
 	"models"
 	"net/http"
@@ -47,7 +46,7 @@ func LoadReadHistoryFromCSV(c echo.Context) error {
 			if len(bookName1) > 0 {
 				bookOp := models.BookOp{}
 				bookId, result := bookOp.FindBookIdByBookName(bookName1)
-				if result != db.SQL_SUCCESS {
+				if result != http.StatusOK {
 					bookId = 0
 				}
 				bookOp.ReadCSVBookOp(strconv.FormatInt(bookId, 10), "이대현", year)
@@ -58,7 +57,7 @@ func LoadReadHistoryFromCSV(c echo.Context) error {
 			if len(bookName2) > 0 {
 				bookOp := models.BookOp{}
 				bookId, result := bookOp.FindBookIdByBookName(bookName2)
-				if result != db.SQL_SUCCESS {
+				if result != http.StatusOK {
 					bookId = 0
 				}
 				bookOp.ReadCSVBookOp(strconv.FormatInt(bookId, 10), "이문선", year)
@@ -90,7 +89,7 @@ func LoadDiscardHistoryFromCSV(c echo.Context) error {
 			if len(bookName1) > 0 {
 				bookOp := models.BookOp{}
 				bookId, result := bookOp.FindBookIdByBookName(bookName1)
-				if result != db.SQL_SUCCESS {
+				if result != http.StatusOK {
 					bookId = 0
 				}
 				bookOp.DiscardBookOp(strconv.FormatInt(bookId, 10), "이대현")
@@ -101,7 +100,7 @@ func LoadDiscardHistoryFromCSV(c echo.Context) error {
 			if len(bookName2) > 0 {
 				bookOp := models.BookOp{}
 				bookId, result := bookOp.FindBookIdByBookName(bookName2)
-				if result != db.SQL_SUCCESS {
+				if result != http.StatusOK {
 					bookId = 0
 				}
 				bookOp.DiscardBookOp(strconv.FormatInt(bookId, 10), "이문선")

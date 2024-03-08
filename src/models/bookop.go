@@ -3,6 +3,7 @@ package models
 import (
 	"db"
 	"fmt"
+	"net/http"
 	"strconv"
 	"strings"
 	"util"
@@ -51,7 +52,7 @@ func (b BookOp) ToString() string {
 }
 
 func (b BookOp) Save() (int64, int) {
-	var retVal int = db.SQL_SUCCESS
+	var retVal int = http.StatusOK
 	var nRow int64 = 0
 
 	dbCon := db.GetConnector()
@@ -60,11 +61,11 @@ func (b BookOp) Save() (int64, int) {
 
 	insertSql, _ := dbCon.Prepare("INSERT INTO go_book_op(book_id, user_name, op_type, op_date) VALUES(?, ?, ?, ?)")
 	result, err := insertSql.Exec(b.bookId, b.userName, b.opType, b.opDate)
-	retVal = db.CheckErr(err)
+	retVal = CheckErr(err)
 
-	if err == nil && retVal == db.SQL_SUCCESS {
+	if err == nil && retVal == http.StatusOK {
 		nRow, _ := result.RowsAffected()
-		retVal = db.CheckResult(nRow, db.INSERT_NO_CREATE)
+		retVal = CheckResult(nRow, http.StatusOK)
 	}
 
 	defer dbCon.Close()
@@ -73,17 +74,17 @@ func (b BookOp) Save() (int64, int) {
 }
 
 func (b BookOp) FindBookIdByBookName(bookName string) (int64, int) {
-	var retVal int = db.SQL_SUCCESS
+	var retVal int = http.StatusOK
 
 	dbCon := db.GetConnector()
 	selectSql, err := dbCon.Query("SELECT book_id FROM go_book WHERE book_name=?", bookName)
-	retVal = db.CheckErr(err)
+	retVal = CheckErr(err)
 
 	var bookId int64 = 0
 	for selectSql.Next() {
 		err = selectSql.Scan(&bookId)
-		if err == nil && retVal == db.SQL_SUCCESS {
-			retVal = db.CheckResult(bookId, db.SELECT_NO_RESULT)
+		if err == nil && retVal == http.StatusOK {
+			retVal = CheckResult(bookId, http.StatusNoContent)
 		}
 	}
 	defer dbCon.Close()

@@ -3,6 +3,7 @@ package models
 import (
 	"db"
 	"fmt"
+	"net/http"
 	"strconv"
 	"strings"
 	"util"
@@ -44,7 +45,7 @@ func (b Book) ToString() string {
 }
 
 func (b Book) Save() (int64, int) {
-	var retVal int = db.SQL_SUCCESS
+	var retVal int = http.StatusOK
 	var nRow int64 = 0
 
 	dbCon := db.GetConnector()
@@ -52,18 +53,18 @@ func (b Book) Save() (int64, int) {
 
 	insertSql, _ := dbCon.Prepare("INSERT INTO go_book(book_id, book_name, editor, publisher, buy_date, status) VALUES(?, ?, ?, ?, ?, ?)")
 	result, err := insertSql.Exec(b.BookId, b.BookName, b.Editor, b.Publisher, b.BuyDate, b.Status)
-	retVal = db.CheckErr(err)
+	retVal = CheckErr(err)
 
-	if err == nil && retVal == db.SQL_SUCCESS {
+	if err == nil && retVal == http.StatusOK {
 		nRow, _ := result.RowsAffected()
-		retVal = db.CheckResult(nRow, db.INSERT_NO_CREATE)
+		retVal = CheckResult(nRow, http.StatusOK)
 	}
 	defer dbCon.Close()
 	return nRow, retVal
 }
 
 func (b Book) UpdateStatus() (int64, int) {
-	var retVal int = db.SQL_SUCCESS
+	var retVal int = http.StatusOK
 	var nRow int64 = 0
 
 	dbCon := db.GetConnector()
@@ -71,11 +72,11 @@ func (b Book) UpdateStatus() (int64, int) {
 
 	insertSql, _ := dbCon.Prepare("UPDATE go_book SET status=? WHERE book_id=?")
 	result, err := insertSql.Exec(b.Status, b.BookId)
-	retVal = db.CheckErr(err)
+	retVal = CheckErr(err)
 
-	if err == nil && retVal == db.SQL_SUCCESS {
+	if err == nil && retVal == http.StatusOK {
 		nRow, _ := result.RowsAffected()
-		retVal = db.CheckResult(nRow, db.INSERT_NO_CREATE)
+		retVal = CheckResult(nRow, http.StatusOK)
 	}
 
 	defer dbCon.Close()
