@@ -2,6 +2,8 @@ package handler
 
 import (
 	"container/list"
+	"db"
+	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -48,4 +50,41 @@ func parseBook(dataList *list.List, bookList *list.List) int {
 	fmt.Printf("book count:%d\n", count)
 
 	return count
+}
+
+func SearchBookToRead(c echo.Context) error {
+	var errCode int = db.SQL_SUCCESS
+	userName := c.Param("userName")
+
+	dbCon := db.GetConnector()
+	selectSql, err := dbCon.Query(`SELECT a.book_id, a.book_name, a.editor, a.publisher, a.buy_date, a.status 
+									FROM go_book a 
+									WHERE a.book_id NOT IN ( 
+										SELECT book_id 
+										FROM go_book_op 
+										WHERE user_name = ? 
+									) 
+									AND a.status NOT IN ('판매', '기부') 
+									AND a.book_name NOT IN('어린왕자', '모비딕')`, userName)
+	errCode = db.CheckErr(err)
+
+	result := models.SearchBookResult{}
+
+	for selectSql.Next() {
+		book := models.Book{}
+		err = selectSql.Scan(&book.BookId, &book.BookName, &book.Editor, &book.Publisher, &book.BuyDate, &book.Status)
+		result.Result = append(result.Result, book)
+
+		if err == nil && errCode == db.SQL_SUCCESS {
+			errCode = db.CheckResult(book.BookId, db.SELECT_NO_RESULT)
+		}
+	}
+
+	result.ResultCode = errCode
+	jsonStr, _ := json.Marshal(result)
+	httpResponse := string(jsonStr)
+
+	defer dbCon.Close()
+
+	return c.String(http.StatusOK, httpResponse)
 }

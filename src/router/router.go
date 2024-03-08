@@ -42,6 +42,7 @@ func Router() *echo.Echo {
 
 	// here start
 	e.GET("/search/:bookName", handler.Search)
+	e.GET("/unRead/:userName", handler.SearchBookToRead)
 
 	// router-group
 	holdGroup := e.Group("/hold")
