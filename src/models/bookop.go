@@ -59,7 +59,9 @@ func (b BookOp) Save() (int64, int) {
 
 	fmt.Printf("BookOp.Save[%s]\n", b.ToString())
 
-	insertSql, _ := dbCon.Prepare("INSERT INTO go_book_op(book_id, user_name, op_type, op_date) VALUES(?, ?, ?, ?)")
+	insertSql, _ :=
+		dbCon.Prepare(`INSERT INTO go_book_op(book_id, user_name, op_type, op_date) 
+						VALUES(?, ?, ?, ?)`)
 	result, err := insertSql.Exec(b.BookId, b.UserName, b.OpType, b.OpDate)
 	retVal = CheckErr(err)
 

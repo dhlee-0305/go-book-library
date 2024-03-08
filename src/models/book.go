@@ -51,7 +51,9 @@ func (b Book) Save() (int64, int) {
 	dbCon := db.GetConnector()
 	fmt.Printf("Book.Save[%s]\n", b.ToString())
 
-	insertSql, _ := dbCon.Prepare("INSERT INTO go_book(book_id, book_name, editor, publisher, buy_date, status) VALUES(?, ?, ?, ?, ?, ?)")
+	insertSql, _ :=
+		dbCon.Prepare(`INSERT INTO go_book(book_id, book_name, editor, publisher, buy_date, status) 
+					VALUES(?, ?, ?, ?, ?, ?)`)
 	result, err := insertSql.Exec(b.BookId, b.BookName, b.Editor, b.Publisher, b.BuyDate, b.Status)
 	retVal = CheckErr(err)
 
@@ -108,7 +110,10 @@ func FindBookByBookName(bookName string) (Book, int) {
 	var retVal int = http.StatusOK
 
 	dbCon := db.GetConnector()
-	selectSql, err := dbCon.Query("SELECT book_id, book_name, editor, publisher, buy_date, status FROM go_book WHERE book_name=?", bookName)
+	selectSql, err :=
+		dbCon.Query(`SELECT book_id, book_name, editor, publisher, buy_date, status 
+					FROM go_book 
+					WHERE book_name=?`, bookName)
 	retVal = CheckErr(err)
 	if err != nil {
 		fmt.Println(err.Error())
@@ -130,7 +135,10 @@ func FindBookByBookId(bookId int64) (Book, int) {
 	var retVal int = http.StatusOK
 
 	dbCon := db.GetConnector()
-	selectSql, err := dbCon.Query("SELECT book_id, book_name, editor, publisher, buy_date, status FROM go_book WHERE book_id=?", bookId)
+	selectSql, err :=
+		dbCon.Query(`SELECT book_id, book_name, editor, publisher, buy_date, status 
+					FROM go_book 
+					WHERE book_id=?`, bookId)
 	retVal = CheckErr(err)
 	if err != nil {
 		fmt.Println(err.Error())
