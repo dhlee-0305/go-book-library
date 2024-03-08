@@ -155,3 +155,11 @@ func FindBookByBookId(bookId int64) (Book, int) {
 
 	return book, retVal
 }
+
+func (b Book) IsChangable() bool {
+	if b.Status == "판매" || b.Status == "기부" {
+		return false
+	} else {
+		return true
+	}
+}

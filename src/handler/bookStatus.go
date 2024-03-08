@@ -49,7 +49,7 @@ func SellBookReg(c echo.Context) error {
 
 	intBookId, _ := strconv.ParseInt(bookId, 10, 64)
 	book, _ := models.FindBookByBookId(intBookId)
-	if book.Status == "판매" || book.Status == "기부" {
+	if book.IsChangable() {
 		checkBookOp := models.BookOp{}
 		checkBookOp.SellBookOp(bookId, userName)
 		result := models.OpResult{}
@@ -85,7 +85,7 @@ func DonateBookReg(c echo.Context) error {
 
 	intBookId, _ := strconv.ParseInt(bookId, 10, 64)
 	book, _ := models.FindBookByBookId(intBookId)
-	if book.Status == "판매" || book.Status == "기부" {
+	if book.IsChangable() {
 		checkBookOp := models.BookOp{}
 		checkBookOp.DonateBookOp(bookId, userName)
 		result := models.OpResult{}
