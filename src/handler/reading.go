@@ -32,7 +32,7 @@ func ReadBookReg(c echo.Context) error {
 	}
 
 	result := models.OpResult{}
-	result.SetResult(bookOp.ToString(), retVal, resultMessage)
+	result.SetResult(bookOp, retVal, resultMessage)
 	resultJson, _ := json.Marshal(result)
 
 	return c.String(http.StatusOK, string(resultJson))

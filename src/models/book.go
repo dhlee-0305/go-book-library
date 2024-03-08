@@ -28,8 +28,8 @@ func (b *Book) SetBook(bookId string, bookName string, editor string, publisher 
 }
 
 func (b *Book) SetBookByOp(bookOp BookOp) {
-	b.BookId = bookOp.bookId
-	b.Status = b.getStatusByOpType(bookOp.opType)
+	b.BookId = bookOp.BookId
+	b.Status = b.getStatusByOpType(bookOp.OpType)
 }
 
 func (b *Book) Equals(bookName string) bool {

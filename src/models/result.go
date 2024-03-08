@@ -36,12 +36,12 @@ func (r *SingleBookResult) SetResult(data Book, resultCode int, resultMessage st
 }
 
 type OpResult struct {
-	Data          string `json:"result"`
+	Data          BookOp `json:"result"`
 	ResultCode    int    `json:"resultCode"`
 	ResultMessage string `json:"resultMessage"`
 }
 
-func (r *OpResult) SetResult(data string, resultCode int, resultMessage string) {
+func (r *OpResult) SetResult(data BookOp, resultCode int, resultMessage string) {
 	r.Data = data
 	r.ResultCode = resultCode
 	r.ResultMessage = resultMessage

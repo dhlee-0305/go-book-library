@@ -14,6 +14,16 @@ func DiscardBookReg(c echo.Context) error {
 	bookId := c.FormValue("bookId")
 	userName := c.FormValue("userName")
 
+	intBookId, _ := strconv.ParseInt(bookId, 10, 64)
+	checkBookOp, _ := models.FindBookOp(intBookId, userName)
+	if checkBookOp.OpType == "DISC" {
+		result := models.OpResult{}
+		result.SetResult(models.BookOp{}, http.StatusConflict, models.DB_CONFLICT)
+		resultJson, _ := json.Marshal(result)
+
+		return c.String(http.StatusOK, string(resultJson))
+	}
+
 	bookOp := models.BookOp{}
 	bookOp.DiscardBookOp(bookId, userName)
 	nRow, retVal := bookOp.Save()
@@ -26,7 +36,7 @@ func DiscardBookReg(c echo.Context) error {
 	}
 
 	result := models.OpResult{}
-	result.SetResult(bookOp.ToString(), retVal, resultMessage)
+	result.SetResult(bookOp, retVal, resultMessage)
 	resultJson, _ := json.Marshal(result)
 
 	return c.String(http.StatusOK, string(resultJson))
@@ -40,7 +50,7 @@ func SellBookReg(c echo.Context) error {
 	book, _ := models.FindBookByBookId(intBookId)
 	if book.Status == "판매" || book.Status == "기부" {
 		result := models.OpResult{}
-		result.SetResult("", http.StatusConflict, models.DB_CONFLICT)
+		result.SetResult(models.BookOp{}, http.StatusConflict, models.DB_CONFLICT)
 		resultJson, _ := json.Marshal(result)
 
 		return c.String(http.StatusOK, string(resultJson))
@@ -60,7 +70,7 @@ func SellBookReg(c echo.Context) error {
 	}
 
 	result := models.OpResult{}
-	result.SetResult(bookOp.ToString(), retVal, resultMessage)
+	result.SetResult(bookOp, retVal, resultMessage)
 	resultJson, _ := json.Marshal(result)
 
 	return c.String(http.StatusOK, string(resultJson))
@@ -74,7 +84,7 @@ func DonateBookReg(c echo.Context) error {
 	book, _ := models.FindBookByBookId(intBookId)
 	if book.Status == "판매" || book.Status == "기부" {
 		result := models.OpResult{}
-		result.SetResult("", http.StatusConflict, models.DB_CONFLICT)
+		result.SetResult(models.BookOp{}, http.StatusConflict, models.DB_CONFLICT)
 		resultJson, _ := json.Marshal(result)
 
 		return c.String(http.StatusOK, string(resultJson))
@@ -94,7 +104,7 @@ func DonateBookReg(c echo.Context) error {
 	}
 
 	result := models.OpResult{}
-	result.SetResult(bookOp.ToString(), retVal, resultMessage)
+	result.SetResult(bookOp, retVal, resultMessage)
 	resultJson, _ := json.Marshal(result)
 
 	return c.String(http.StatusOK, string(resultJson))
