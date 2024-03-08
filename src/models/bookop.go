@@ -72,22 +72,3 @@ func (b BookOp) Save() (int64, int) {
 
 	return nRow, retVal
 }
-
-func (b BookOp) FindBookIdByBookName(bookName string) (int64, int) {
-	var retVal int = http.StatusOK
-
-	dbCon := db.GetConnector()
-	selectSql, err := dbCon.Query("SELECT book_id FROM go_book WHERE book_name=?", bookName)
-	retVal = CheckErr(err)
-
-	var bookId int64 = 0
-	for selectSql.Next() {
-		err = selectSql.Scan(&bookId)
-		if err == nil && retVal == http.StatusOK {
-			retVal = CheckResult(bookId, http.StatusNoContent)
-		}
-	}
-	defer dbCon.Close()
-
-	return bookId, retVal
-}

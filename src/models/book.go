@@ -96,3 +96,32 @@ func (b Book) getStatusByOpType(opType string) string {
 
 	return status
 }
+
+func FindBookIdByBookName(bookName string) (int64, int) {
+
+	book, retVal := FindBookByBookName(bookName)
+
+	return book.BookId, retVal
+}
+
+func FindBookByBookName(bookName string) (Book, int) {
+	var retVal int = http.StatusOK
+
+	dbCon := db.GetConnector()
+	selectSql, err := dbCon.Query("SELECT book_id, book_name, editor, publisher, buy_date, status FROM go_book WHERE book_name=?", bookName)
+	retVal = CheckErr(err)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	book := Book{}
+	for selectSql.Next() {
+		err = selectSql.Scan(&book.BookId, &book.BookName, &book.Editor, &book.Publisher, &book.BuyDate, &book.Status)
+		if err == nil && retVal == http.StatusOK {
+			retVal = CheckResult(book.BookId, http.StatusNoContent)
+		}
+	}
+	defer dbCon.Close()
+
+	return book, retVal
+}

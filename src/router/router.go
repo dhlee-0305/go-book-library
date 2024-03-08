@@ -40,7 +40,8 @@ func Router() *echo.Echo {
 	e.POST("/list", handler.List2)
 
 	// here start
-	e.GET("/search/:bookName", handler.SearchCSV)
+	e.GET("/search/:bookName", handler.Search)
+	e.GET("/searchCSV/:bookName", handler.SearchCSV)
 	e.GET("/unRead/:userName", handler.SearchBookToRead)
 
 	// router-group

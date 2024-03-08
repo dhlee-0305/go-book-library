@@ -45,7 +45,7 @@ func LoadReadHistoryFromCSV(c echo.Context) error {
 			}
 			if len(bookName1) > 0 {
 				bookOp := models.BookOp{}
-				bookId, result := bookOp.FindBookIdByBookName(bookName1)
+				bookId, result := models.FindBookIdByBookName(bookName1)
 				if result != http.StatusOK {
 					bookId = 0
 				}
@@ -56,7 +56,7 @@ func LoadReadHistoryFromCSV(c echo.Context) error {
 			}
 			if len(bookName2) > 0 {
 				bookOp := models.BookOp{}
-				bookId, result := bookOp.FindBookIdByBookName(bookName2)
+				bookId, result := models.FindBookIdByBookName(bookName2)
 				if result != http.StatusOK {
 					bookId = 0
 				}
@@ -88,7 +88,7 @@ func LoadDiscardHistoryFromCSV(c echo.Context) error {
 			}
 			if len(bookName1) > 0 {
 				bookOp := models.BookOp{}
-				bookId, result := bookOp.FindBookIdByBookName(bookName1)
+				bookId, result := models.FindBookIdByBookName(bookName1)
 				if result != http.StatusOK {
 					bookId = 0
 				}
@@ -99,7 +99,7 @@ func LoadDiscardHistoryFromCSV(c echo.Context) error {
 			}
 			if len(bookName2) > 0 {
 				bookOp := models.BookOp{}
-				bookId, result := bookOp.FindBookIdByBookName(bookName2)
+				bookId, result := models.FindBookIdByBookName(bookName2)
 				if result != http.StatusOK {
 					bookId = 0
 				}

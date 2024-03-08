@@ -13,9 +13,23 @@ import (
 	"github.com/labstack/echo"
 )
 
+func Search(c echo.Context) error {
+	bookName := c.Param("bookName")
+	book, resultCode := models.FindBookByBookName(bookName)
+
+	var resultMessage string
+	if resultCode == http.StatusOK && len(book.BookName) == 0 {
+		resultMessage = models.DB_NO_CONTENT
+	}
+	searchResult := models.SingleBookResult{}
+	searchResult.SetResult(book, resultCode, resultMessage)
+	resultJson, _ := json.Marshal(searchResult)
+
+	return c.String(http.StatusOK, string(resultJson))
+}
+
 func SearchCSV(c echo.Context) error {
 	bookName := c.Param("bookName")
-	fmt.Printf("input bookName:%s\n", bookName)
 	dataList := util.LoadFile("data/books.csv")
 	bookList := list.New()
 
