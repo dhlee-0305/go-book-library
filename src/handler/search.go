@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"logger"
 	"models"
 	"util"
 
@@ -77,6 +78,7 @@ func parseBook(dataList *list.List, bookList *list.List) int {
 
 func SearchBookToRead(c echo.Context) error {
 	userName := c.Param("userName")
+	logger.Info("SearchBookToRead - userName=" + userName)
 
 	result := models.MultiBookResult{}
 	errCode := models.SearchBookByUserName(userName, &result.Data)

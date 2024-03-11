@@ -13,6 +13,9 @@ $ go get -u github.com/labstack/echo/...
 
 $ go get github.com/go-sql-driver/mysql
 
+#### 1.3. zap 로거 설치
+$ go get -u go.uber.org/zap
+
 
 ### 2. 환경 변수 셋팅
 
