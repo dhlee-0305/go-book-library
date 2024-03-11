@@ -163,3 +163,34 @@ func (b Book) IsChangable() bool {
 		return true
 	}
 }
+
+func SearchBookByUserName(userName string, bookArray *[]Book) int {
+	var errCode int = http.StatusOK
+
+	dbCon := db.GetConnector()
+	selectSql, err :=
+		dbCon.Query(`SELECT a.book_id, a.book_name, a.editor, a.publisher, a.buy_date, a.status 
+					FROM go_book a 
+					WHERE a.book_id NOT IN ( 
+						SELECT book_id 
+						FROM go_book_op 
+						WHERE user_name = ? 
+					) 
+					AND a.status NOT IN ('판매', '기부') 
+					AND a.book_name NOT IN('어린왕자', '모비딕')`, userName)
+	errCode = CheckErr(err)
+
+	for selectSql.Next() {
+		book := Book{}
+		err = selectSql.Scan(&book.BookId, &book.BookName, &book.Editor, &book.Publisher, &book.BuyDate, &book.Status)
+		*bookArray = append(*bookArray, book)
+
+		if err == nil && errCode == http.StatusOK {
+			errCode = CheckResult(book.BookId, http.StatusNoContent)
+		}
+	}
+
+	defer dbCon.Close()
+
+	return errCode
+}

@@ -2,7 +2,6 @@ package handler
 
 import (
 	"container/list"
-	"db"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -77,41 +76,19 @@ func parseBook(dataList *list.List, bookList *list.List) int {
 }
 
 func SearchBookToRead(c echo.Context) error {
-	var errCode int = http.StatusOK
 	userName := c.Param("userName")
 
-	dbCon := db.GetConnector()
-	selectSql, err :=
-		dbCon.Query(`SELECT a.book_id, a.book_name, a.editor, a.publisher, a.buy_date, a.status 
-					FROM go_book a 
-					WHERE a.book_id NOT IN ( 
-						SELECT book_id 
-						FROM go_book_op 
-						WHERE user_name = ? 
-					) 
-					AND a.status NOT IN ('판매', '기부') 
-					AND a.book_name NOT IN('어린왕자', '모비딕')`, userName)
-	errCode = models.CheckErr(err)
-
 	result := models.MultiBookResult{}
+	errCode := models.SearchBookByUserName(userName, &result.Data)
 
-	for selectSql.Next() {
-		book := models.Book{}
-		err = selectSql.Scan(&book.BookId, &book.BookName, &book.Editor, &book.Publisher, &book.BuyDate, &book.Status)
-		result.Data = append(result.Data, book)
-
-		if err == nil && errCode == http.StatusOK {
-			errCode = models.CheckResult(book.BookId, http.StatusNoContent)
-		}
-	}
-
-	if len(result.Data) == 0 {
+	if len(result.Data) == 0 || errCode != http.StatusOK {
 		result.ResultMessage = models.DB_NO_CONTENT
+	} else {
+		errCode = http.StatusOK
 	}
 	result.ResultCode = errCode
-	resultJson, _ := json.Marshal(result)
 
-	defer dbCon.Close()
+	resultJson, _ := json.Marshal(result)
 
 	return c.String(http.StatusOK, string(resultJson))
 }
