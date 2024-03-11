@@ -35,9 +35,10 @@ func Router() *echo.Echo {
 
 	// router list
 	// sample
-	e.GET("/users/:id", handler.GetUser2)
-	e.GET("/show", handler.Show2)
-	e.POST("/list", handler.List2)
+	e.GET("/samplePath/:id", handler.SamplePath)
+	e.GET("/sampleGet", handler.SampleGet)
+	e.POST("/sampleForm", handler.SampleForm)
+	e.POST("/sampleJson", handler.SampleJson)
 
 	// here start
 	e.GET("/search/:bookName", handler.Search)
