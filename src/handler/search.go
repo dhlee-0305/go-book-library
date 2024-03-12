@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"logger"
 	"models"
@@ -82,6 +83,27 @@ func SearchBookToRead(c echo.Context) error {
 
 	result := models.MultiBookResult{}
 	errCode := models.SearchBookByUserName(userName, &result.Data)
+
+	if len(result.Data) == 0 || errCode != http.StatusOK {
+		result.ResultMessage = models.DB_NO_CONTENT
+	} else {
+		errCode = http.StatusOK
+	}
+	result.ResultCode = errCode
+
+	resultJson, _ := json.Marshal(result)
+
+	return c.String(http.StatusOK, string(resultJson))
+}
+
+func SearchReadnBook(c echo.Context) error {
+	userName := c.QueryParam("userName")
+	limit, _ := strconv.ParseInt(c.QueryParam("limit"), 10, 64)
+	offset, _ := strconv.ParseInt(c.QueryParam("offset"), 10, 64)
+	logger.Info(fmt.Sprintf("SearchReadnBook - userName=%s, limit=%d, offset=%d", userName, limit, offset))
+
+	result := models.MultiBookResult{}
+	errCode := models.SearchReadBook(userName, (int)(limit), (int)(offset), &result.Data)
 
 	if len(result.Data) == 0 || errCode != http.StatusOK {
 		result.ResultMessage = models.DB_NO_CONTENT

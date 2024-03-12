@@ -194,3 +194,36 @@ func SearchBookByUserName(userName string, bookArray *[]Book) int {
 
 	return errCode
 }
+
+func SearchReadBook(userName string, limit int, offset int, bookArray *[]Book) int {
+	var errCode int = http.StatusOK
+
+	dbCon := db.GetConnector()
+	selectSql, err :=
+		dbCon.Query(`SELECT a.book_id, a.book_name, a.editor, a.publisher, a.buy_date, a.status 
+					FROM go_book a 
+					WHERE a.book_id IN ( 
+						SELECT book_id 
+						FROM go_book_op 
+						WHERE user_name = ? 
+						AND op_type = 'READ' 
+					) 
+					ORDER BY a.book_id ASC
+					LIMIT ? 
+					OFFSET ?`, userName, limit, offset)
+	errCode = CheckErr(err)
+
+	for selectSql.Next() {
+		book := Book{}
+		err = selectSql.Scan(&book.BookId, &book.BookName, &book.Editor, &book.Publisher, &book.BuyDate, &book.Status)
+		*bookArray = append(*bookArray, book)
+
+		if err == nil && errCode == http.StatusOK {
+			errCode = CheckResult(book.BookId, http.StatusNoContent)
+		}
+	}
+
+	defer dbCon.Close()
+
+	return errCode
+}

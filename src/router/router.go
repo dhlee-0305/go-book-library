@@ -41,9 +41,13 @@ func Router() *echo.Echo {
 	e.POST("/sampleJson", handler.SampleJson)
 
 	// here start
-	e.GET("/search/:bookName", handler.Search)
-	e.GET("/searchCSV/:bookName", handler.SearchCSV)
-	e.GET("/unRead/:userName", handler.SearchBookToRead)
+	searchGroup := e.Group("/search")
+	{
+		searchGroup.GET("/:bookName", handler.Search)
+		searchGroup.GET("/readn", handler.SearchReadnBook)
+		searchGroup.GET("/csv/:bookName", handler.SearchCSV)
+		searchGroup.GET("/unRead/:userName", handler.SearchBookToRead)
+	}
 
 	// router-group
 	holdGroup := e.Group("/hold")
@@ -55,7 +59,6 @@ func Router() *echo.Echo {
 
 	readGroup := e.Group("/read")
 	{
-		readGroup.POST("", handler.ReadList)
 		readGroup.POST("/reg", handler.ReadBookReg)
 	}
 
