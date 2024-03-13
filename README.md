@@ -19,6 +19,7 @@ $ go get -u go.uber.org/zap
 
 #### 1.4. Swaggo 설치 및 실행 - gopls 충돌
 $ go install github.com/swaggo/swag/cmd/swag@latest
+
 $ go get github.com/swaggo/echo-swagger
 
 
