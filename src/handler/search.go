@@ -96,6 +96,15 @@ func SearchBookToRead(c echo.Context) error {
 	return c.String(http.StatusOK, string(resultJson))
 }
 
+// @title SearchReadnBook godoc
+// @versoin 1.0
+// @Description 사용자가 읽은 책 리스트를 페이지 단위로 조회한다.
+// @Param userName query string true "사용자 명"
+// @Param limit query int true "읽을 개수"
+// @Param offset query int true "읽을 순서(offset)"
+// @Success 200 {string} string "도서목록 JSON 문자열"
+// @Failure 500 {string} string "조회 실패 내역"
+// @Router /search/readn [get]
 func SearchReadnBook(c echo.Context) error {
 	userName := c.QueryParam("userName")
 	limit, _ := strconv.ParseInt(c.QueryParam("limit"), 10, 64)

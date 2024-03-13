@@ -10,6 +10,14 @@ import (
 	_ "github.com/labstack/echo/middleware"
 )
 
+// @title DiscardBookReg godoc
+// @versoin 1.0
+// @Description 읽지 않을 예정인 책을 등록한다.
+// @Param bookId formData string true "도서 명"
+// @Param userName formData string true "사용자 명"
+// @Success 200 {string} string "처리 내역 JSON"
+// @Failure 500 {string} string "실패 내역"
+// @Router /hold/discard/reg [post]
 func DiscardBookReg(c echo.Context) error {
 	bookId := c.FormValue("bookId")
 	userName := c.FormValue("userName")

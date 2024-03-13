@@ -5,3 +5,8 @@ src/golang.org
 data
 src/filippo.io
 src/go.uber.org
+src/gopkg.in
+src/sigs.k8s.io
+src/honnef.co
+docs
+src/mvdan.cc

@@ -1,6 +1,7 @@
 ## go-book-library
 (private project) 도서 관리 API 시스템
 
+
 ## 실행 환경 구성
 
 ### 1. 의존 모듈 설치(터미런에서 실행)
@@ -15,6 +16,10 @@ $ go get github.com/go-sql-driver/mysql
 
 #### 1.3. zap 로거 설치
 $ go get -u go.uber.org/zap
+
+#### 1.4. Swaggo 설치 및 실행 - gopls 충돌
+$ go install github.com/swaggo/swag/cmd/swag@latest
+$ go get github.com/swaggo/echo-swagger
 
 
 ### 2. 환경 변수 셋팅
