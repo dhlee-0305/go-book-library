@@ -2,9 +2,8 @@ package main
 
 import (
 	"fmt"
-	router "router"
-
 	_ "handler/docs"
+	router "router"
 )
 
 // @title Swagger Example API

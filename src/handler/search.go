@@ -77,6 +77,13 @@ func parseBook(dataList *list.List, bookList *list.List) int {
 	return count
 }
 
+// @title SearchBookToRead godoc
+// @versoin 1.0
+// @Description 사용자가 읽어야 하는 책을 조회한다.
+// @Param userName path string true "사용자 명"
+// @Success 200 {string} string "도서목록 JSON 문자열"
+// @Failure 500 {string} string "조회 실패 내역"
+// @Router /search/unRead/{userName} [get]
 func SearchBookToRead(c echo.Context) error {
 	userName := c.Param("userName")
 	logger.Info("SearchBookToRead - userName=" + userName)
